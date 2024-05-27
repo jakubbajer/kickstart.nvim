@@ -1,4 +1,4 @@
 return {
   'github/copilot.vim',
-  opts = {},
+  lazy = true,
 }

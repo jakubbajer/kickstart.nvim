@@ -162,6 +162,7 @@ vim.bo.softtabstop = 2
 
 -- Relative line numbers
 vim.opt.relativenumber = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -575,7 +576,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -585,6 +586,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         glsl_analyzer = {},
+        elixirls = {},
         --
 
         lua_ls = {
@@ -789,19 +791,65 @@ require('lazy').setup({
 
   -- Theme
   {
-    'sainnhe/everforest',
+    'rebelot/kanagawa.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      -- Optionally configure and load the colorscheme
-      -- directly inside the plugin declaration.
-      vim.g.everforest_enable_italic = true
-      vim.g.everforest_transparent_background = 2
-      vim.cmd.colorscheme 'everforest'
+      require('kanagawa').setup {
+        transparent = true,
+        statementStyle = {},
+        colors = {
+          theme = {
+            all = {
+              ui = {
+                bg_gutter = 'none',
+              },
+            },
+          },
+        },
+        overrides = function(colors)
+          local theme = colors.theme
+          local palette = colors.palette
+
+          return {
+            -- Transparent floating windows
+            NormalFloat = { bg = 'none' },
+            FloatBorder = { bg = 'none' },
+            FloatTitle = { bg = 'none' },
+            NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+            LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+            MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+
+            -- Borderless Telescope
+            TelescopeTitle = { fg = theme.ui.special, bold = true },
+            TelescopePromptNormal = { bg = 'none' },
+            TelescopePromptBorder = { fg = theme.ui.bg_p1, bg = 'none' },
+            TelescopeResultsNormal = { fg = theme.ui.fg_dim, bg = 'none' },
+            TelescopeResultsBorder = { fg = theme.ui.bg_p1, bg = 'none' },
+            TelescopePreviewNormal = { bg = 'none' },
+            TelescopePreviewBorder = { fg = theme.ui.bg_p1, bg = 'none' },
+
+            -- Dark completion menu
+            Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 }, -- add `blend = vim.o.pumblend` to enable transparency
+            PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
+            PmenuSbar = { bg = theme.ui.bg_m1 },
+            PmenuThumb = { bg = theme.ui.bg_p2 },
+
+            -- Alpha start screen
+            AlphaLogo = { fg = palette.oniViolet, bold = true },
+            AlphaInfo = { fg = palette.sakuraPink },
+            AlphaButton = { fg = palette.waveRed },
+            AlphaButtonShortcut = { fg = palette.peachRed },
+            AlphaQuote = { fg = palette.fujiGray, italic = true },
+          }
+        end,
+      }
+
+      vim.cmd.colorscheme 'kanagawa'
     end,
   },
 
-  -- Highlight todo, notes, etc in comments
+  -- Highlight todo, notes, etc in co mments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
@@ -845,7 +893,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'elixir', 'eex' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
