@@ -86,10 +86,10 @@ local function layout()
           result,
           button(
             tostring(#result + 1),
-            string.format('%s  %s', icon, filename_short),
+            string.format('%s  %s', icon or '', filename_short),
             string.format('<Cmd>e %s<CR>', filename),
             nil,
-            { hl = { { hl, 0, 3 }, { 'Normal', 5, #filename_short + 5 } } }
+            { hl = { { hl or 'Normal', 0, 3 }, { 'Normal', 5, #filename_short + 5 } } }
           )
         )
         if #result == 5 then
